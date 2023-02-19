@@ -4,6 +4,7 @@ namespace Bosnadev\Database\Schema\Grammars;
 
 use Illuminate\Support\Fluent;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Query\Expression;
 use Bosnadev\Database\Schema\Blueprint;
 
 /**
@@ -284,6 +285,10 @@ class PostgresGrammar extends \Illuminate\Database\Schema\Grammars\PostgresGramm
      */
     protected function getDefaultValue($value)
     {
+        if ($value instanceof Expression) {
+            return $this->getValue($value);
+        }
+         
         if($this->isUuid($value)) return strval($value);
 
         return parent::getDefaultValue($value);
